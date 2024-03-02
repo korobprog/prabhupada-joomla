@@ -1,0 +1,28 @@
+version: '3.9'
+name: prabhupada
+services:
+  php:
+    volumes:
+      – ./php-ini:/usr/local/etc/php/custom.d
+    environment:
+    PHP_INI_SCAN_DIR: “/usr/local/etc/php/custom.d:/usr/local/etc/php/conf.d
+  joomla:
+    image: joomla:5.0.3-php8.2-apache
+    restart: always
+    ports:
+      - 8080:8000
+    environment:
+      - JOOMLA_DB_HOST=joomladb
+      - JOOMLA_DB_PASSWORD=example
+    user: 1000:1000
+    volumes:
+      - ./site_joomla:/var/www/html
+
+  joomladb:
+    image: mariadb:11.3
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=example
+    user: 1000:1000
+    volumes:
+      - ./db:/var/lib/mysql
